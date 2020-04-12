@@ -52,39 +52,39 @@ namespace LSDebug
         {
             this.Show();
         }
-        public void Print(String text)
+        public async void Print(String text)
         {
                 this.LST.Print(text);
         }
-        public void PrintLine(String text)
+        public async void PrintLine(String text)
         {
                 this.LST.PrintLine(text);
         }
-        public void Print(String text,Color color)
+        public async void Print(String text,Color color)
         {
                 this.LST.Print(text, color);
         }
-        public void PrintLine(String text, Color color)
+        public async void PrintLine(String text, Color color)
         {
                 this.LST.PrintLine(text, color);
         }
-        public void Print(String text, TextType type)
+        public async void Print(String text, TextType type)
         {
                 this.LST.Print(text, type);
         }
-        public void PrintLine(String text, TextType type)
+        public async void PrintLine(String text, TextType type)
         {
                 this.LST.PrintLine(text, type);
         }
-        public void DumpBytes(byte[] bytes)
+        public async void DumpBytes(byte[] bytes)
         {
                 this.LST.DumpBytes(bytes);
         }
-        public void DumpBytes(byte[] bytes,int offset)
+        public async void DumpBytes(byte[] bytes,int offset)
         {
                 this.LST.DumpBytes(bytes, offset);
         }
-        public void DumpBytes(byte[] bytes,int offset,string label)
+        public async void DumpBytes(byte[] bytes,int offset,string label)
         {
                 this.LST.DumpBytes(bytes, offset, label);
         }
@@ -162,6 +162,7 @@ namespace LSDebug
                 }
                 this.Write("\n");
             }
+            GotoBottom();
         }
         public void DumpBytes(byte[] bytes,int offset)
         {
@@ -209,6 +210,7 @@ namespace LSDebug
                 }
                 this.Write("\n");
             }
+            GotoBottom();
         }
         public void DumpBytes(byte[] bytes, int offset,string label)
         {
@@ -316,6 +318,9 @@ namespace LSDebug
         public void Write(string Text)
         {
             this.AppendText(Text);
+        }
+        public void GotoBottom()
+        {
             this.SelectionStart = this.Text.Length;
             this.ScrollToCaret();
         }
@@ -335,6 +340,7 @@ namespace LSDebug
                 this.LogDate();
             }
             this.Write(text);
+            GotoBottom();
         }
         public void PrintLine(String text)
         {
@@ -344,6 +350,7 @@ namespace LSDebug
             }
             this.Write(text);
             this.AppendText("\n");
+            GotoBottom();
         }
         public void Print(String text,Color color)
         {
@@ -352,6 +359,7 @@ namespace LSDebug
                 this.LogDate();
             }
             this.Write(text,color);
+            GotoBottom();
         }
         public void PrintLine(String text,Color color)
         {
@@ -361,6 +369,7 @@ namespace LSDebug
             }
             this.Write(text,color);
             this.AppendText("\n");
+            GotoBottom();
         }
         public void Print(String text,TextType type)
         {
@@ -372,7 +381,7 @@ namespace LSDebug
             this.AppendSymbolizator(type);
             this.Write(text);
             this.SelectDefaultColor();
-
+            GotoBottom();
         }
         public void PrintLine(String text, TextType type)
         {
@@ -385,7 +394,7 @@ namespace LSDebug
             this.Write(text);
             this.SelectDefaultColor();
             this.Write("\n");
-
+            GotoBottom();
         }
         #endregion
         #region Color Selection
