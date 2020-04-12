@@ -32,7 +32,7 @@ namespace LSDebug
             this.Controls.Add(txbox);
             ASTest.Tick += ASTestTimer;
             ASTest.Interval = 500;
-            ASTest.Start();
+            //ASTest.Start();
         }
         private void ASTestTimer(object sender,EventArgs e)
         {
@@ -68,6 +68,7 @@ namespace LSDebug
             LSRichDebug.PrintLine("Safe", TextType.Safe);
             LSRichDebug.PrintLine("Success", TextType.Success);
             LSRichDebug.PrintLine("Hi");
+            LSRichDebug.AddVariable("Test", 0XDEAD);
             //LSRichDebug.DumpBytes(testbytes,0x70000000);
             //LSRichDebug.DumpBytes(testbytes,0x128F0000,"HighAddress");
         }

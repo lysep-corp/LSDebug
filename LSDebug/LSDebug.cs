@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Data;
 namespace LSDebug
 {
     public enum TextType
@@ -18,13 +19,29 @@ namespace LSDebug
     }
     class LSDebugUI : Form{
         private LSDebug LST = new LSDebug();
+        private LSDebugVariable LSTV = new LSDebugVariable();
+        private SplitContainer SPC = new SplitContainer();
         public LSDebugUI() : base()
         {
-            this.Controls.Add(LST);
-            this.Size = new Size(840, 460);
-            LST.Location = new Point(0, 0);
-            LST.Dock = DockStyle.Fill;
+            SPC.BackColor = Color.FromArgb(23, 23, 23);
+            SPC.SplitterWidth = 2;
+            SPC.Orientation = Orientation.Vertical;
+            SPC.Dock = DockStyle.Fill;
+            SPC.Visible = true;
+            SPC.BorderStyle = BorderStyle.None;
+            this.Controls.Add(SPC);
+            SPC.Panel1.Controls.Add(LSTV);
+            SPC.Panel2.Controls.Add(LST);
+            SPC.FixedPanel = FixedPanel.Panel1;
+            SPC.SplitterDistance= 270;
+            this.Size = new Size(870, 460);
+
             LST.Visible = true;
+            LST.Dock = DockStyle.Fill;
+
+            LSTV.Visible = true;
+            LSTV.Dock = DockStyle.Fill;
+
         }
         public bool Symbolizator
         {
@@ -48,6 +65,13 @@ namespace LSDebug
                 LST.TimeBool = value;
             }
         }
+        #region VariableDebugger
+        public async void AddVariable(string VariableName,int value)
+        {
+            LSTV.AddVariable(VariableName, value);
+        }
+        #endregion
+        #region ConsoleDebugger
         public void Debug()
         {
             this.Show();
@@ -88,8 +112,9 @@ namespace LSDebug
         {
                 this.LST.DumpBytes(bytes, offset, label);
         }
-
+        #endregion
     }
+    #region Build Of ConsoleDebugger
     class LSDebug : RichTextBox
     {
         public static Color MainThemeColor = Color.FromArgb(9, 9, 7);
@@ -435,4 +460,39 @@ namespace LSDebug
         }
         #endregion
     }
+    #endregion
+    #region Build Of VariableDebugger
+    class LSDebugVariable : ListView
+    {
+        public static Color MainThemeColor = Color.FromArgb(9, 9, 7);
+        public static Color SecondaryThemeColor = Color.FromArgb(150, 0, 0);
+        public static Color TextColor = Color.FromArgb(238, 238, 238);
+
+        public LSDebugVariable() : base()
+        {
+            this.BackColor = MainThemeColor;
+            this.ForeColor = TextColor;
+            this.Margin = new Padding(8, 8, 8, 8);
+            //this.Font = new Font(new FontFamily("Consolas"),
+            //                     9f,
+            //                     FontStyle.Regular,
+            //                     GraphicsUnit.Point
+            //);
+            //this.BorderStyle = BorderStyle.None;
+            this.Columns.Add("Item Column", 100, HorizontalAlignment.Left);
+            this.Columns.Add("Name", 100, HorizontalAlignment.Left);
+            this.Columns.Add("Value", 140, HorizontalAlignment.Left);
+            this.Columns.Add("Type", 30, HorizontalAlignment.Left);
+        }
+        public void AddVariable(string VariableName,int value)
+        {
+            ListViewItem item = new ListViewItem(VariableName);
+            item.SubItems.Add(VariableName);
+            item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
+            item.SubItems.Add("int");
+            this.Items.Add(item);
+        }
+
+    }
+    #endregion
 }
