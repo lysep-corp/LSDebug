@@ -1,0 +1,2 @@
+# LSDebug
+ External Debug Console
