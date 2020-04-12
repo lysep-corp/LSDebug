@@ -47,7 +47,7 @@ namespace LSDebug
             LSRichDebug.PrintLine("Safe", TextType.Safe);
             LSRichDebug.PrintLine("Success", TextType.Success);
             LSRichDebug.PrintLine("Hi");
-            byte[] testbytes = File.ReadAllBytes("falx.exe");
+            byte[] testbytes = File.ReadAllBytes("testbytes.exe");
             LSRichDebug.DumpBytes(testbytes);
             LSRichDebug.DumpBytes(testbytes);
             LSRichDebug.DumpBytes(testbytes);
