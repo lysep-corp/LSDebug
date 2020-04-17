@@ -17,23 +17,118 @@ namespace LSDebug
         Success=4,
         Failed=5
     }
+    public enum ResizeType
+    {
+        Percent = 0,
+        Pixel = 1
+    }
+    class LSSplitterPanel : Panel
+    {
+        public Panel Panel1, Panel2;
+        public ResizeType ResizeType=ResizeType.Pixel;
+        private int WidthPercentPanel_ = 30, WidthPanel_;
+        public int WidthPercentPanel {
+            get
+            {
+                return WidthPercentPanel_;
+            }
+            set
+            {
+                WidthPercentPanel_ = value;
+                ResizeType = ResizeType.Percent;
+                InitializePanelStyle();
+            }
+        }
+        public int WidthPanel{
+            get
+            {
+                return WidthPanel_;
+            }
+            set
+            {
+               WidthPanel_ = value;
+                ResizeType = ResizeType.Pixel;
+                InitializePanelStyle();
+            }
+        }
+        private bool Reverse_=false;
+        public bool Reverse {
+            get {
+                return Reverse_;
+            }
+            set
+            {
+                Reverse_ = value;
+                InitializePanelStyle();
+            }
+        }
+        public LSSplitterPanel(Panel panel1,Panel panel2) : base()
+        {
+            InitializeStyle();
+            this.Panel1 = panel1;
+            this.Panel2 = panel2;
+            WidthPanel = this.Width / 2;
+            this.Controls.Add(Panel1);
+            this.Controls.Add(Panel2);
+        }
+        public LSSplitterPanel() : base()
+        {
+            InitializeStyle();
+            this.Panel1 = new Panel();
+            this.Panel2 = new Panel();
+            WidthPanel = this.Width / 2;
+
+            this.Panel1.BackColor = Color.Red;
+            this.Panel2.BackColor = Color.Green;
+            this.Controls.Add(Panel1);
+            this.Controls.Add(Panel2);
+        }
+
+        private void InitializeStyle()
+        {
+            this.BorderStyle = BorderStyle.None;
+            this.BackColor = Color.Purple;// Color.FromArgb(23, 23, 23);
+            this.ForeColor = Color.FromArgb(238, 238, 238);
+            this.Dock = DockStyle.Fill;
+            this.Resize += this.OnResizePanel;
+        }
+        public void InitializePanelStyle()
+        {
+            Panel p1, p2;
+            p1 = Reverse_ ? Panel2 : Panel1;
+            p2 = Reverse_ ? Panel1 : Panel2;
+            if(p1 != null && p2 != null) { 
+                int p1w, p2w;
+                p1.Height = this.Height;
+                p2.Height = this.Height;
+                p1w = ResizeType == ResizeType.Pixel ? WidthPanel_ : this.Width * WidthPercentPanel_ / 100;
+                p2w = this.Width - p1w;
+                p1.Width = p1w;
+                p2.Left = p1w;
+                p2.Width = p2w;
+            }
+        }
+        private void OnResizePanel(object sender,EventArgs e)
+        {
+            InitializePanelStyle();
+        }
+       
+
+    }
     class LSDebugUI : Form{
         private LSDebug LST = new LSDebug();
         private LSDebugVariable LSTV = new LSDebugVariable();
-        private SplitContainer SPC = new SplitContainer();
+        private LSSplitterPanel SPC = new LSSplitterPanel();
         public LSDebugUI() : base()
         {
             SPC.BackColor = Color.FromArgb(23, 23, 23);
-            SPC.SplitterWidth = 2;
-            SPC.Orientation = Orientation.Vertical;
             SPC.Dock = DockStyle.Fill;
             SPC.Visible = true;
             SPC.BorderStyle = BorderStyle.None;
             this.Controls.Add(SPC);
             SPC.Panel1.Controls.Add(LSTV);
             SPC.Panel2.Controls.Add(LST);
-            SPC.FixedPanel = FixedPanel.Panel1;
-            SPC.SplitterDistance= 270;
+            SPC.WidthPanel= 290;
             this.Size = new Size(870, 460);
 
             LST.Visible = true;
@@ -462,35 +557,72 @@ namespace LSDebug
     }
     #endregion
     #region Build Of VariableDebugger
-    class LSDebugVariable : ListView
+    class LSDebugVariable : DataGridView
     {
         public static Color MainThemeColor = Color.FromArgb(9, 9, 7);
+        public static Color MainGridColor = Color.FromArgb(15, 15, 13);
         public static Color SecondaryThemeColor = Color.FromArgb(150, 0, 0);
         public static Color TextColor = Color.FromArgb(238, 238, 238);
-
+        public static Color CellStyle_BackgroundColor = Color.FromArgb(21, 21, 21);
+        public static Color CellStyle_SelectionColor = Color.FromArgb(29, 29, 29);
+        public static Color CellStyleHeader_BackgroundColor = Color.FromArgb(25, 25, 25);
+        public static Color CellStyleHeader_SelectionColor = Color.FromArgb(29, 29, 29);
         public LSDebugVariable() : base()
         {
-            this.BackColor = MainThemeColor;
+            this.BackgroundColor = MainThemeColor;
+            this.GridColor = MainGridColor;
             this.ForeColor = TextColor;
             this.Margin = new Padding(8, 8, 8, 8);
-            //this.Font = new Font(new FontFamily("Consolas"),
-            //                     9f,
-            //                     FontStyle.Regular,
-            //                     GraphicsUnit.Point
-            //);
-            //this.BorderStyle = BorderStyle.None;
-            this.Columns.Add("Item Column", 100, HorizontalAlignment.Left);
-            this.Columns.Add("Name", 100, HorizontalAlignment.Left);
-            this.Columns.Add("Value", 140, HorizontalAlignment.Left);
-            this.Columns.Add("Type", 30, HorizontalAlignment.Left);
+            this.Font = new Font(new FontFamily("Consolas"),
+                                 9f,
+                                 FontStyle.Regular,
+                                 GraphicsUnit.Point
+            );
+            this.BorderStyle = BorderStyle.None;
+            this.DefaultCellStyle.BackColor = CellStyle_BackgroundColor;
+            this.DefaultCellStyle.SelectionBackColor = CellStyle_SelectionColor;
+            this.DefaultCellStyle.ForeColor = TextColor;
+            this.ColumnHeadersDefaultCellStyle.BackColor = CellStyleHeader_BackgroundColor;
+            this.ColumnHeadersDefaultCellStyle.ForeColor = TextColor;
+            this.RowHeadersDefaultCellStyle.BackColor = CellStyleHeader_BackgroundColor;
+            this.RowHeadersDefaultCellStyle.ForeColor = TextColor;
+            this.RowHeadersDefaultCellStyle.Padding = new Padding(3, 2, 3, 2);
+            this.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            this.BorderStyle = BorderStyle.None;
+            this.ColumnHeadersBorderStyle= DataGridViewHeaderBorderStyle.None;
+            this.ReadOnly = true;
+            this.EnableHeadersVisualStyles = false;
+            DataGridViewCell cellTemplate = new DataGridViewTextBoxCell();
+
+            DataGridViewColumn nameColumn = new DataGridViewColumn();
+            nameColumn.Name = "Name";
+            nameColumn.HeaderText= "Name";
+            nameColumn.CellTemplate = cellTemplate;
+            DataGridViewColumn valueColumn = new DataGridViewColumn();
+            valueColumn.Name = "Value";
+            valueColumn.HeaderText = "Value";
+            valueColumn.CellTemplate = cellTemplate;
+            DataGridViewColumn typeColumn = new DataGridViewColumn();
+            typeColumn.Name = "Type";
+            typeColumn.HeaderText = "Type";
+            typeColumn.CellTemplate = cellTemplate;
+            typeColumn.Width = 50;
+            this.Columns.Add(nameColumn);
+            this.Columns.Add(valueColumn);
+            this.Columns.Add(typeColumn);
         }
         public void AddVariable(string VariableName,int value)
         {
-            ListViewItem item = new ListViewItem(VariableName);
-            item.SubItems.Add(VariableName);
-            item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
-            item.SubItems.Add("int");
-            this.Items.Add(item);
+            DataGridViewRow row = (DataGridViewRow)this.Rows[0].Clone();
+            row.Tag = VariableName;
+            row.Cells[0].Value = VariableName;
+            row.Cells[1].Value = String.Format("0x{0}", value.ToString("X8"));
+            row.Cells[2].Value = "int";
+            this.Rows.Add(row);
+            //ListViewItem item = new ListViewItem(VariableName);
+            //item.SubItems.Add(VariableName);
+            //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
+            //item.SubItems.Add("int");
         }
 
     }
