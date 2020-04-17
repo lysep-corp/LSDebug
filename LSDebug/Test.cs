@@ -17,6 +17,9 @@ namespace LSDebug
         TextBox txbox = new TextBox();
         Button cbbutton = new Button();
         Timer ASTest = new Timer();
+        public static int TestVariable = 0xDEAA;
+        public static int TestVariable1 = 0xBEEF;
+        public static int TestVariable2 = 0xFEED;
         public Test()
         {
             InitializeComponent();
@@ -31,12 +34,29 @@ namespace LSDebug
             txbox.Location = new Point(cbbutton_.Size.Width + cbbutton.Width + 5 + 5, 0);
             this.Controls.Add(txbox);
             ASTest.Tick += ASTestTimer;
-            ASTest.Interval = 500;
+            ASTest.Interval = 200;
             ASTest.Start();
         }
         private void ASTestTimer(object sender,EventArgs e)
         {
-            this.txbox.Location = new Point(this.txbox.Location.X, this.txbox.Location.Y + 3);
+            //this.txbox.Location = new Point(this.txbox.Location.X, this.txbox.Location.Y + 3);
+            LSRichDebug.SetVariable("TestVariable", TestVariable);
+            LSRichDebug.SetVariable("TestVariable1", TestVariable1);
+            LSRichDebug.SetVariable("TestVariable2", TestVariable2);
+            //LSRichDebug.PrintLine("TT0:" + LSRichDebug.LSTV.CheckInRow("TestVariable"));
+            //LSRichDebug.PrintLine("TT1:" + LSRichDebug.LSTV.CheckInRow("TestVariable1"));
+            //LSRichDebug.PrintLine("TT2:" + LSRichDebug.LSTV.CheckInRow("TestVariable2"));
+
+            //LSRichDebug.SetVariable("TestVariable3", TestVariable3);
+            //LSRichDebug.PrintLine(String.Format("TestVariable {0}", TestVariable), TextType.Info);
+            //LSRichDebug.PrintLine(String.Format("TestVariable1 {0}", TestVariable1), TextType.Info);
+            //LSRichDebug.PrintLine(String.Format("TestVariable2 {0}", TestVariable2), TextType.Info);
+            //LSRichDebug.PrintLine(String.Format("TestVariable3 {0}", TestVariable3), TextType.Info);
+
+            TestVariable++;
+            TestVariable1++;
+            TestVariable2++;
+
         }
         private void ButtonClick_(object sender,EventArgs e)
         {
@@ -68,13 +88,14 @@ namespace LSDebug
             LSRichDebug.PrintLine("Safe", TextType.Safe);
             LSRichDebug.PrintLine("Success", TextType.Success);
             LSRichDebug.PrintLine("Hi");
+            LSRichDebug.PrintLine("TT:"+LSRichDebug.LSTV.GetIndexByVarName("TestVariable1"));
+            
             //LSRichDebug.DumpBytes(testbytes,0x70000000);
             //LSRichDebug.DumpBytes(testbytes,0x128F0000,"HighAddress");
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             
-
         }
     }
 }
