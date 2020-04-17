@@ -52,29 +52,29 @@ namespace LSDebug
         {
             this.Show();
         }
-        public async void Print(String text)
+        public async void Print(object text)
         {
-                this.LST.Print(text);
+                this.LST.Print(text.ToString());
         }
-        public async void PrintLine(String text)
+        public async void PrintLine(object text)
         {
-                this.LST.PrintLine(text);
+                this.LST.PrintLine(text.ToString());
         }
-        public async void Print(String text,Color color)
+        public async void Print(object text,Color color)
         {
-                this.LST.Print(text, color);
+                this.LST.Print(text.ToString(), color);
         }
-        public async void PrintLine(String text, Color color)
+        public async void PrintLine(object text, Color color)
         {
-                this.LST.PrintLine(text, color);
+                this.LST.PrintLine(text.ToString(), color);
         }
-        public async void Print(String text, TextType type)
+        public async void Print(object text, TextType type)
         {
-                this.LST.Print(text, type);
+                this.LST.Print(text.ToString(), type);
         }
-        public async void PrintLine(String text, TextType type)
+        public async void PrintLine(object text, TextType type)
         {
-                this.LST.PrintLine(text, type);
+                this.LST.PrintLine(text.ToString(), type);
         }
         public async void DumpBytes(byte[] bytes)
         {
