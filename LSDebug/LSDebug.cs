@@ -699,6 +699,7 @@ namespace LSDebug
             //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
             //item.SubItems.Add("int");
         }
+
     }
     #endregion
 }
