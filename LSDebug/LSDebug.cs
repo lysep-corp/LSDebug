@@ -93,6 +93,41 @@ namespace LSDebug
             ForeColor = Color.FromArgb(238, 238, 238);
             Dock = DockStyle.Fill;
             Resize += OnResizePanel;
+            MouseClick += OnMouseClickEvent;
+            MouseDown += OnMouseDownEvent;
+            MouseUp += OnMouseUpEvent;
+            MouseHover += OnMouseHoverEvent;
+
+        }
+        private bool IsMouseDown  = false;
+        public void OnMouseClickEvent(object sender,MouseEventArgs e)
+        {
+            Global.LSRichDebug.Print("Mouse clicking...");
+
+        }
+        public void OnMouseDownEvent(object sender, MouseEventArgs e)
+        {
+
+        }
+        public void OnMouseUpEvent(object sender, MouseEventArgs e)
+        {
+
+        }
+        public void OnMouseHoverEvent(object sender, EventArgs e)
+        {
+            int p1w;
+            p1w = ResizeType == ResizeType.Pixel ? WidthPanel_ : Width * WidthPercentPanel_ / 100;
+            int px, py,size=4;
+            px = Location.X + p1w;
+            py = Location.Y;
+            Rectangle hoversection = new Rectangle(px - size / 2, py, size, Height);
+            if (hoversection.Contains(Cursor.Position))
+            {
+                Cursor.Current = Cursors.SizeWE;
+                Global.LSRichDebug.Print("Mouse hovering...");
+            }
+            Global.LSRichDebug.Print("Mouse not hovering...");
+
         }
         public void InitializePanelStyle()
         {
