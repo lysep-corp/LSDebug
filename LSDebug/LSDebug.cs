@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Text;
 
 namespace LSDebug
 {
@@ -165,7 +166,31 @@ namespace LSDebug
             }
         }
         #region VariableDebugger
+        public async void SetVariable(string VariableName, short value)
+        {
+            LSTV.SetVariable(VariableName, value);
+        }
         public async void SetVariable(string VariableName, int value)
+        {
+            LSTV.SetVariable(VariableName, value);
+        }
+        public async void SetVariable(string VariableName, float value)
+        {
+            LSTV.SetVariable(VariableName, value);
+        }
+        public async void SetVariable(string VariableName, double value)
+        {
+            LSTV.SetVariable(VariableName, value);
+        }
+        public async void SetVariable(string VariableName, byte value)
+        {
+            LSTV.SetVariable(VariableName, value);
+        }
+        public async void SetVariable(string VariableName, char value)
+        {
+            LSTV.SetVariable(VariableName, value);
+        }
+        public async void SetVariable(string VariableName, string value)
         {
             LSTV.SetVariable(VariableName, value);
         }
@@ -628,7 +653,6 @@ namespace LSDebug
             {
                 Icon VariableIco = Icon.FromHandle(((Bitmap)VariableIcon).GetHicon());
                 Graphics graphics = e.Graphics;
-
                 int w = 20;
                 int h = 20;
                 int x = e.RowBounds.X + ((RowHeadersWidth - w) / 2);
@@ -690,6 +714,234 @@ namespace LSDebug
                 row.Cells[1].Value = value;
                 row.Cells[2].Value = String.Format("0x{0}", value.ToString("X8"));
                 row.Cells[3].Value = "int";
+                row.Height = 30;
+                tmpin = Rows.Add(row);
+
+            }
+            //ListViewItem item = new ListViewItem(VariableName);
+            //item.SubItems.Add(VariableName);
+            //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
+            //item.SubItems.Add("int");
+        }
+        public void SetVariable(string VariableName, float value)
+        {
+            if (tmpv.Equals(VariableName))
+            {
+                Rows[tmpin].Cells[1].Value = value;
+                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
+                return;
+            }
+            tmpv = VariableName;
+            if (CheckInRow(VariableName))
+            {
+                int i = GetIndexByVarName(VariableName);
+                tmpin = i;
+
+                if (i >= 0)
+                {
+                    Rows[i].Cells[1].Value = value;
+                    Rows[i].Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
+                }
+            }
+            else
+            {
+                DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
+                row.Tag = VariableName;
+                row.Cells[0].Value = VariableName;
+                row.Cells[1].Value = value;
+                row.Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt32(BitConverter.GetBytes(value), 0).ToString("X8"));
+                row.Cells[3].Value = "float";
+                row.Height = 30;
+                tmpin = Rows.Add(row);
+
+            }
+            //ListViewItem item = new ListViewItem(VariableName);
+            //item.SubItems.Add(VariableName);
+            //item.SubItems.Add(String.Format("0sx{0}", value.ToString("X8")));
+            //item.SubItems.Add("int");
+        }
+        public void SetVariable(string VariableName, double value)
+        {
+            if (tmpv.Equals(VariableName))
+            {
+                Rows[tmpin].Cells[1].Value = value;
+                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
+                return;
+            }
+            tmpv = VariableName;
+            if (CheckInRow(VariableName))
+            {
+                int i = GetIndexByVarName(VariableName);
+                tmpin = i;
+
+                if (i >= 0)
+                {
+                    Rows[i].Cells[1].Value = value;
+                    Rows[i].Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
+                }
+            }
+            else
+            {
+                DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
+                row.Tag = VariableName;
+                row.Cells[0].Value = VariableName;
+                row.Cells[1].Value = value;
+                row.Cells[2].Value = String.Format("0x{0}", BitConverter.ToInt64(BitConverter.GetBytes(value), 0).ToString("X8"));
+                row.Cells[3].Value = "double";
+                row.Height = 30;
+                tmpin = Rows.Add(row);
+
+            }
+            //ListViewItem item = new ListViewItem(VariableName);
+            //item.SubItems.Add(VariableName);
+            //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
+            //item.SubItems.Add("int");
+        }
+        public void SetVariable(string VariableName, short value)
+        {
+            if (tmpv.Equals(VariableName))
+            {
+                Rows[tmpin].Cells[1].Value = value;
+                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", value.ToString("X4"));
+                return;
+            }
+            tmpv = VariableName;
+            if (CheckInRow(VariableName))
+            {
+                int i = GetIndexByVarName(VariableName);
+                tmpin = i;
+
+                if (i >= 0)
+                {
+                    Rows[i].Cells[1].Value = value;
+                    Rows[i].Cells[2].Value = String.Format("0x{0}", value.ToString("X4"));
+                }
+            }
+            else
+            {
+                DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
+                row.Tag = VariableName;
+                row.Cells[0].Value = VariableName;
+                row.Cells[1].Value = value;
+                row.Cells[2].Value = String.Format("0x{0}", value.ToString("X4"));
+                row.Cells[3].Value = "short";
+                row.Height = 30;
+                tmpin = Rows.Add(row);
+
+            }
+            //ListViewItem item = new ListViewItem(VariableName);
+            //item.SubItems.Add(VariableName);
+            //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
+            //item.SubItems.Add("int");
+        }
+        public void SetVariable(string VariableName, byte value)
+        {
+            if (tmpv.Equals(VariableName))
+            {
+                Rows[tmpin].Cells[1].Value = value;
+                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", value.ToString("X2"));
+                return;
+            }
+            tmpv = VariableName;
+            if (CheckInRow(VariableName))
+            {
+                int i = GetIndexByVarName(VariableName);
+                tmpin = i;
+
+                if (i >= 0)
+                {
+                    Rows[i].Cells[1].Value = value;
+                    Rows[i].Cells[2].Value = String.Format("0x{0}", value.ToString("X2"));
+                }
+            }
+            else
+            {
+                DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
+                row.Tag = VariableName;
+                row.Cells[0].Value = VariableName;
+                row.Cells[1].Value = value;
+                row.Cells[2].Value = String.Format("0x{0}", value.ToString("X2"));
+                row.Cells[3].Value = "byte";
+                row.Height = 30;
+                tmpin = Rows.Add(row);
+
+            }
+            //ListViewItem item = new ListViewItem(VariableName);
+            //item.SubItems.Add(VariableName);
+            //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
+            //item.SubItems.Add("int");
+        }
+        public void SetVariable(string VariableName, char value)
+        {
+            if (tmpv.Equals(VariableName))
+            {
+                Rows[tmpin].Cells[1].Value = value;
+                Rows[tmpin].Cells[2].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
+                return;
+            }
+            tmpv = VariableName;
+            if (CheckInRow(VariableName))
+            {
+                int i = GetIndexByVarName(VariableName);
+                tmpin = i;
+
+                if (i >= 0)
+                {
+                    Rows[i].Cells[1].Value = value;
+                    Rows[i].Cells[2].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
+                }
+            }
+            else
+            {
+                DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
+                row.Tag = VariableName;
+                row.Cells[0].Value = VariableName;
+                row.Cells[1].Value = value;
+                row.Cells[2].Value = String.Format("0x{0}", BitConverter.GetBytes(value)[0].ToString("X2"));
+                row.Cells[3].Value = "char";
+                row.Height = 30;
+                tmpin = Rows.Add(row);
+
+            }
+            //ListViewItem item = new ListViewItem(VariableName);
+            //item.SubItems.Add(VariableName);
+            //item.SubItems.Add(String.Format("0x{0}", value.ToString("X8")));
+            //item.SubItems.Add("int");
+        }
+        public void SetVariable(string VariableName, string value)
+        {
+            if (tmpv.Equals(VariableName))
+            {
+                Rows[tmpin].Cells[1].Value = value;
+                string buffer = "";
+                Array.ForEach(Encoding.Unicode.GetBytes(value), x => buffer += x.ToString("X2") + " ");
+                Rows[tmpin].Cells[2].Value = String.Format("{0}", buffer);
+                return;
+            }
+            tmpv = VariableName;
+            if (CheckInRow(VariableName))
+            {
+                int i = GetIndexByVarName(VariableName);
+                tmpin = i;
+
+                if (i >= 0)
+                {
+                    Rows[i].Cells[1].Value = value;
+                    string buffer = "";
+                    Array.ForEach(Encoding.Unicode.GetBytes(value),x=>buffer+= x.ToString("X2")+" ");
+                    Rows[i].Cells[2].Value = String.Format("{0}", buffer);
+                }
+            }
+            else
+            {
+                DataGridViewRow row = (DataGridViewRow)Rows[0].Clone();
+                row.Tag = VariableName;
+                row.Cells[0].Value = VariableName;
+                row.Cells[1].Value = value;
+                string buffer = "";
+                Array.ForEach(Encoding.Unicode.GetBytes(value), x => buffer += x.ToString("X2") + " ");
+                row.Cells[2].Value = String.Format("{0}", buffer);
+                row.Cells[3].Value = "string";
                 row.Height = 30;
                 tmpin = Rows.Add(row);
 

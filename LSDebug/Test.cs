@@ -17,9 +17,14 @@ namespace LSDebug
         TextBox txbox = new TextBox();
         Button cbbutton = new Button();
         Timer ASTest = new Timer();
-        public static int TestVariable = 0xDEAA;
-        public static int TestVariable1 = 0xBEEF;
-        public static int TestVariable2 = 0xFEED;
+        public static int integerVar = 0xDEAA;
+        public static float floatVar= 0.1f;
+        public static double doubleVar = 0.1;
+        public static short shortVar = 0;
+        public static byte byteVar = 0;
+        public static byte charVar = 0;
+        public static string stringVar = "";
+        public static int seed = 15684;
         public Test()
         {
             InitializeComponent();
@@ -34,15 +39,20 @@ namespace LSDebug
             txbox.Location = new Point(cbbutton_.Size.Width + cbbutton.Width + 5 + 5, 0);
             this.Controls.Add(txbox);
             ASTest.Tick += ASTestTimer;
-            ASTest.Interval = 200;
+            ASTest.Interval = 50;
             ASTest.Start();
         }
         private void ASTestTimer(object sender,EventArgs e)
         {
             //this.txbox.Location = new Point(this.txbox.Location.X, this.txbox.Location.Y + 3);
-            LSRichDebug.SetVariable("TestVariable", TestVariable);
-            LSRichDebug.SetVariable("TestVariable1", TestVariable1);
-            LSRichDebug.SetVariable("TestVariable2", TestVariable2);
+            LSRichDebug.SetVariable("Integer", integerVar);
+            LSRichDebug.SetVariable("Float", floatVar);
+            LSRichDebug.SetVariable("Double", doubleVar);
+            LSRichDebug.SetVariable("Short", shortVar);
+            LSRichDebug.SetVariable("Byte", byteVar);
+            LSRichDebug.SetVariable("Char", (char)byteVar);
+            LSRichDebug.SetVariable("String", stringVar);
+            
             //LSRichDebug.PrintLine("TT0:" + LSRichDebug.LSTV.CheckInRow("TestVariable"));
             //LSRichDebug.PrintLine("TT1:" + LSRichDebug.LSTV.CheckInRow("TestVariable1"));
             //LSRichDebug.PrintLine("TT2:" + LSRichDebug.LSTV.CheckInRow("TestVariable2"));
@@ -53,9 +63,18 @@ namespace LSDebug
             //LSRichDebug.PrintLine(String.Format("TestVariable2 {0}", TestVariable2), TextType.Info);
             //LSRichDebug.PrintLine(String.Format("TestVariable3 {0}", TestVariable3), TextType.Info);
 
-            TestVariable++;
-            TestVariable1++;
-            TestVariable2++;
+            integerVar++;
+            shortVar++;
+            byteVar++;
+            charVar++;
+            floatVar = floatVar + 0.1f;
+            doubleVar= doubleVar + 0.1;
+            stringVar = "";
+            
+            for (int i = 0; i < 10; i++)
+            {
+                stringVar += Convert.ToString(Convert.ToChar((byte)(255*Math.Abs(Math.Sin(i*Math.PI/6+byteVar * Math.PI * 2 / 256)))));
+            }
 
         }
         private void ButtonClick_(object sender,EventArgs e)
