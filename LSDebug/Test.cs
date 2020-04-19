@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+
 namespace LSDebug
 {
     public partial class Test : Form
     {
-        LSDebugUI LSRichDebug = new LSDebugUI();
         Button cbbutton_ = new Button();
         TextBox txbox = new TextBox();
         Button cbbutton = new Button();
@@ -28,7 +28,7 @@ namespace LSDebug
         public Test()
         {
             InitializeComponent();
-            LSRichDebug.Debug();
+            Global.LSRichDebug.Debug();
             cbbutton.Text = "B1";
             this.Controls.Add(cbbutton);
             cbbutton.Click += ButtonClick;
@@ -45,13 +45,13 @@ namespace LSDebug
         private void ASTestTimer(object sender,EventArgs e)
         {
             //this.txbox.Location = new Point(this.txbox.Location.X, this.txbox.Location.Y + 3);
-            LSRichDebug.SetVariable("Integer", integerVar);
-            LSRichDebug.SetVariable("Float", floatVar);
-            LSRichDebug.SetVariable("Double", doubleVar);
-            LSRichDebug.SetVariable("Short", shortVar);
-            LSRichDebug.SetVariable("Byte", byteVar);
-            LSRichDebug.SetVariable("Char", (char)byteVar);
-            LSRichDebug.SetVariable("String", stringVar);
+            Global.LSRichDebug.SetVariable("Integer", integerVar);
+            Global.LSRichDebug.SetVariable("Float", floatVar);
+            Global.LSRichDebug.SetVariable("Double", doubleVar);
+            Global.LSRichDebug.SetVariable("Short", shortVar);
+            Global.LSRichDebug.SetVariable("Byte", byteVar);
+            Global.LSRichDebug.SetVariable("Char", (char)byteVar);
+            Global.LSRichDebug.SetVariable("String", stringVar);
             
             //LSRichDebug.PrintLine("TT0:" + LSRichDebug.LSTV.CheckInRow("TestVariable"));
             //LSRichDebug.PrintLine("TT1:" + LSRichDebug.LSTV.CheckInRow("TestVariable1"));
@@ -80,34 +80,33 @@ namespace LSDebug
         private void ButtonClick_(object sender,EventArgs e)
         {
             byte[] testbytes = File.ReadAllBytes("testbytes.exe");
-            LSRichDebug.DumpBytes(testbytes);
+            Global.LSRichDebug.DumpBytes(testbytes);
         }
         private void ButtonClick(object sender,EventArgs e)
         {
-            LSRichDebug.PrintLine("Info", TextType.Info);
-            LSRichDebug.PrintLine("Danger", TextType.Danger);
-            LSRichDebug.PrintLine("Failed", TextType.Failed);
-            LSRichDebug.PrintLine("Warning", TextType.Warning);
-            LSRichDebug.PrintLine("Safe", TextType.Safe);
-            LSRichDebug.PrintLine("Success", TextType.Success);
-            LSRichDebug.PrintLine("Hi");
-            LSRichDebug.Symbolizator = false;
-            LSRichDebug.PrintLine("Info", TextType.Info);
-            LSRichDebug.PrintLine("Danger", TextType.Danger);
-            LSRichDebug.PrintLine("Failed", TextType.Failed);
-            LSRichDebug.PrintLine("Warning", TextType.Warning);
-            LSRichDebug.PrintLine("Safe", TextType.Safe);
-            LSRichDebug.PrintLine("Success", TextType.Success);
-            LSRichDebug.PrintLine("Hi");
-            LSRichDebug.TimeBool = false;
-            LSRichDebug.PrintLine("Info", TextType.Info);
-            LSRichDebug.PrintLine("Danger", TextType.Danger);
-            LSRichDebug.PrintLine("Failed", TextType.Failed);
-            LSRichDebug.PrintLine("Warning", TextType.Warning);
-            LSRichDebug.PrintLine("Safe", TextType.Safe);
-            LSRichDebug.PrintLine("Success", TextType.Success);
-            LSRichDebug.PrintLine("Hi");
-            LSRichDebug.PrintLine("TT:"+LSRichDebug.LSTV.GetIndexByVarName("TestVariable1"));
+            Global.LSRichDebug.PrintLine("Info", TextType.Info);
+            Global.LSRichDebug.PrintLine("Danger", TextType.Danger);
+            Global.LSRichDebug.PrintLine("Failed", TextType.Failed);
+            Global.LSRichDebug.PrintLine("Warning", TextType.Warning);
+            Global.LSRichDebug.PrintLine("Safe", TextType.Safe);
+            Global.LSRichDebug.PrintLine("Success", TextType.Success);
+            Global.LSRichDebug.PrintLine("Hi");
+            Global.LSRichDebug.Symbolizator = false;
+            Global.LSRichDebug.PrintLine("Info", TextType.Info);
+            Global.LSRichDebug.PrintLine("Danger", TextType.Danger);
+            Global.LSRichDebug.PrintLine("Failed", TextType.Failed);
+            Global.LSRichDebug.PrintLine("Warning", TextType.Warning);
+            Global.LSRichDebug.PrintLine("Safe", TextType.Safe);
+            Global.LSRichDebug.PrintLine("Success", TextType.Success);
+            Global.LSRichDebug.PrintLine("Hi");
+            Global.LSRichDebug.TimeBool = false;
+            Global.LSRichDebug.PrintLine("Info", TextType.Info);
+            Global.LSRichDebug.PrintLine("Danger", TextType.Danger);
+            Global.LSRichDebug.PrintLine("Failed", TextType.Failed);
+            Global.LSRichDebug.PrintLine("Warning", TextType.Warning);
+            Global.LSRichDebug.PrintLine("Safe", TextType.Safe);
+            Global.LSRichDebug.PrintLine("Success", TextType.Success);
+            Global.LSRichDebug.PrintLine("Hi");
             
             //LSRichDebug.DumpBytes(testbytes,0x70000000);
             //LSRichDebug.DumpBytes(testbytes,0x128F0000,"HighAddress");
