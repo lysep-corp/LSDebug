@@ -4,10 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text;
 
-/*
-Credits : https://github.com/lysep-corp/LSDebug
-Specialy thanks to LYSEP Corp.  <3
-*/
 namespace LSDebug
 {
     public enum TextType
