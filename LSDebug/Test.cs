@@ -41,6 +41,7 @@ namespace LSDebug
             ASTest.Tick += ASTestTimer;
             ASTest.Interval = 50;
             ASTest.Start();
+            Global.LSRichDebug.EnableVariableDebugger();
         }
         private void ASTestTimer(object sender,EventArgs e)
         {
