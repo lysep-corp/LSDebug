@@ -38,21 +38,28 @@ namespace LSDebug
             cbbutton_.Click += ButtonClick_;
             txbox.Location = new Point(cbbutton_.Size.Width + cbbutton.Width + 5 + 5, 0);
             this.Controls.Add(txbox);
+            Global.LSRichDebug.EnableVariableDebugger();
+            Global.LSRichDebug.WidthPercentPanel = 70;
             ASTest.Tick += ASTestTimer;
             ASTest.Interval = 50;
             ASTest.Start();
-            Global.LSRichDebug.EnableVariableDebugger();
+            
         }
         private void ASTestTimer(object sender,EventArgs e)
         {
             //this.txbox.Location = new Point(this.txbox.Location.X, this.txbox.Location.Y + 3);
-            Global.LSRichDebug.SetVariable("Integer", integerVar);
-            Global.LSRichDebug.SetVariable("Float", floatVar);
-            Global.LSRichDebug.SetVariable("Double", doubleVar);
-            Global.LSRichDebug.SetVariable("Short", shortVar);
-            Global.LSRichDebug.SetVariable("Byte", byteVar);
-            Global.LSRichDebug.SetVariable("Char", (char)byteVar);
-            Global.LSRichDebug.SetVariable("String", stringVar);
+            
+            for (int i = 0; i < 12; i++)
+            {
+                Global.LSRichDebug.SetVariable(String.Format("Integer {0}",i), integerVar);
+                Global.LSRichDebug.SetVariable(String.Format("Float {0}", i), floatVar);
+                Global.LSRichDebug.SetVariable(String.Format("Double {0}", i), doubleVar);
+                Global.LSRichDebug.SetVariable(String.Format("Short {0}", i), shortVar);
+                Global.LSRichDebug.SetVariable(String.Format("Byte {0}", i), byteVar);
+                Global.LSRichDebug.SetVariable(String.Format("Char {0}", i), (char)byteVar);
+                Global.LSRichDebug.SetVariable(String.Format("String {0}", i), stringVar);
+            }
+            
             
             //LSRichDebug.PrintLine("TT0:" + LSRichDebug.LSTV.CheckInRow("TestVariable"));
             //LSRichDebug.PrintLine("TT1:" + LSRichDebug.LSTV.CheckInRow("TestVariable1"));

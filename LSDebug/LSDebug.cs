@@ -27,6 +27,26 @@ namespace LSDebug
         public Panel Panel1, Panel2;
         public ResizeType ResizeType = ResizeType.Pixel;
         private int WidthPercentPanel_ = 30, WidthPanel_;
+        public LSSplitterPanel(Panel panel1, Panel panel2) : base()
+        {
+            InitializeStyle();
+            Panel1 = panel1;
+            Panel2 = panel2;
+            Controls.Add(Panel1);
+            Controls.Add(Panel2);
+            WidthPercentPanel = 50;
+        }
+        public LSSplitterPanel() : base()
+        {
+            InitializeStyle();
+            Panel1 = new Panel();
+            Panel2 = new Panel();
+            Panel1.BackColor = Color.Red;
+            Panel2.BackColor = Color.Green;
+            Controls.Add(Panel1);
+            Controls.Add(Panel2);
+            WidthPercentPanel = 50;
+        }
         public int WidthPercentPanel
         {
             get
@@ -37,7 +57,7 @@ namespace LSDebug
             {
                 WidthPercentPanel_ = value;
                 ResizeType = ResizeType.Percent;
-                InitializePanelStyle();
+                InitializePanelSizes();
             }
         }
         public int WidthPanel
@@ -50,42 +70,22 @@ namespace LSDebug
             {
                 WidthPanel_ = value;
                 ResizeType = ResizeType.Pixel;
-                InitializePanelStyle();
+                InitializePanelSizes();
             }
         }
-        private bool Reverse_ = false;
-        public bool Reverse
-        {
-            get
-            {
-                return Reverse_;
-            }
-            set
-            {
-                Reverse_ = value;
-                InitializePanelStyle();
-            }
-        }
-        public LSSplitterPanel(Panel panel1, Panel panel2) : base()
-        {
-            InitializeStyle();
-            Panel1 = panel1;
-            Panel2 = panel2;
-            WidthPanel = this.Width / 2;
-            Controls.Add(Panel1);
-            Controls.Add(Panel2);
-        }
-        public LSSplitterPanel() : base()
-        {
-            InitializeStyle();
-            Panel1 = new Panel();
-            Panel2 = new Panel();
-            WidthPanel = this.Width / 2;
-            Panel1.BackColor = Color.Red;
-            Panel2.BackColor = Color.Green;
-            Controls.Add(Panel1);
-            Controls.Add(Panel2);
-        }
+        //private bool Reverse_ = false;
+        //public bool Reverse
+        //{
+        //    get
+        //    {
+        //        return Reverse_;
+        //    }
+        //    set
+        //    {
+        //        Reverse_ = value;
+        //        InitializePanelSizes();
+        //    }
+        //}
         private void InitializeStyle()
         {
             BorderStyle = BorderStyle.None;
@@ -94,26 +94,27 @@ namespace LSDebug
             Dock = DockStyle.Fill;
             Resize += OnResizePanel;
         }
-        public void InitializePanelStyle()
+        public void InitializePanelSizes()
         {
-            Panel p1, p2;
-            p1 = Reverse_ ? Panel2 : Panel1;
-            p2 = Reverse_ ? Panel1 : Panel2;
-            if (p1 != null && p2 != null)
+            int p1w, p1h, p2w, p2h;
+            
+            if (Panel1 != null && Panel2 != null)
             {
-                int p1w, p2w;
-                p1.Height = Height;
-                p2.Height = Height;
+                p1h = Height;
+                p2h = Height;
                 p1w = ResizeType == ResizeType.Pixel ? WidthPanel_ : Width * WidthPercentPanel_ / 100;
                 p2w = Width - p1w;
-                p1.Width = p1w;
-                p2.Left = p1w;
-                p2.Width = p2w;
+                Panel1.Width = p1w;
+                Panel2.Width = p2w;
+                Panel1.Height = p1h;
+                Panel2.Height = p2h;
+                Panel2.Left = p1w;
             }
+
         }
         private void OnResizePanel(object sender, EventArgs e)
         {
-            InitializePanelStyle();
+            InitializePanelSizes();
         }
     }
     #endregion
@@ -131,19 +132,17 @@ namespace LSDebug
             if(VariableDebugger)
             {
                 SPC.BackColor = Color.FromArgb(23, 23, 23);
-                SPC.Dock = DockStyle.Fill;
                 SPC.Visible = true;
                 SPC.BorderStyle = BorderStyle.None;
                 Controls.Add(SPC);
                 SPC.Panel1.Controls.Add(LSTV);
                 SPC.Panel2.Controls.Add(LST);
-                SPC.WidthPanel = 380;
             }
             else
             {
                 Controls.Add(LST);
             }
-            Size = new Size(980, 460);
+            Size = new Size(1280, 720);
 
             LST.Visible = true;
             LST.Dock = DockStyle.Fill;
@@ -175,7 +174,41 @@ namespace LSDebug
                 LST.TimeBool = value;
             }
         }
-
+        #region SPC Interface
+        public int WidthPercentPanel
+        {
+            get
+            {
+                return SPC.WidthPercentPanel;
+            }
+            set
+            {
+                SPC.WidthPercentPanel = value;
+            }
+        }
+        public int WidthPanel
+        {
+            get
+            {
+                return SPC.WidthPanel;
+            }
+            set
+            {
+                SPC.WidthPanel = value;
+            }
+        }
+        //public bool Reverse
+        //{
+        //    get
+        //    {
+        //        return SPC.Reverse;
+        //    }
+        //    set
+        //    {
+        //        SPC.Reverse = value;
+        //    }
+        //}
+        #endregion
         #region VariableDebugger
         public async void SetVariable(string VariableName, short value)
         {
@@ -216,10 +249,13 @@ namespace LSDebug
             SPC.Dock = DockStyle.Fill;
             SPC.Visible = true;
             SPC.BorderStyle = BorderStyle.None;
+            LSTV.Dock = DockStyle.Fill;
+            LST.Dock = DockStyle.Fill;
+            SPC.WidthPercentPanel = 50;
             Controls.Add(SPC);
             SPC.Panel1.Controls.Add(LSTV);
             SPC.Panel2.Controls.Add(LST);
-            SPC.WidthPanel = 380;
+            LSTV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             PrintLine("Variable Debugger enabled.", TextType.Info);
         }
 
@@ -734,6 +770,7 @@ namespace LSDebug
         }
         private string tmpv = "";
         private int tmpin;
+        
         public void SetVariable(string VariableName, int value)
         {
             if (tmpv.Equals(VariableName))
