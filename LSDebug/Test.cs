@@ -43,22 +43,19 @@ namespace LSDebug
             ASTest.Tick += ASTestTimer;
             ASTest.Interval = 50;
             ASTest.Start();
-            
+
         }
         private void ASTestTimer(object sender,EventArgs e)
         {
             //this.txbox.Location = new Point(this.txbox.Location.X, this.txbox.Location.Y + 3);
             
-            for (int i = 0; i < 12; i++)
-            {
-                Global.LSRichDebug.SetVariable(String.Format("Integer {0}",i), integerVar);
-                Global.LSRichDebug.SetVariable(String.Format("Float {0}", i), floatVar);
-                Global.LSRichDebug.SetVariable(String.Format("Double {0}", i), doubleVar);
-                Global.LSRichDebug.SetVariable(String.Format("Short {0}", i), shortVar);
-                Global.LSRichDebug.SetVariable(String.Format("Byte {0}", i), byteVar);
-                Global.LSRichDebug.SetVariable(String.Format("Char {0}", i), (char)byteVar);
-                Global.LSRichDebug.SetVariable(String.Format("String {0}", i), stringVar);
-            }
+                Global.LSRichDebug.SetVariable(String.Format("Integer {0}",0), integerVar,"Numbers");
+                Global.LSRichDebug.SetVariable(String.Format("Float {0}", 0), floatVar, "Numbers");
+                Global.LSRichDebug.SetVariable(String.Format("Double {0}", 0), doubleVar, "Numbers");
+                Global.LSRichDebug.SetVariable(String.Format("Short {0}", 0), shortVar, "Numbers");
+                Global.LSRichDebug.SetVariable(String.Format("Byte {0}", 0), byteVar, "Numbers");
+                Global.LSRichDebug.SetVariable(String.Format("Char {0}", 0), (char)byteVar, "Chars");
+                Global.LSRichDebug.SetVariable(String.Format("String {0}", 0), stringVar, "Chars");
             
             
             //LSRichDebug.PrintLine("TT0:" + LSRichDebug.LSTV.CheckInRow("TestVariable"));
